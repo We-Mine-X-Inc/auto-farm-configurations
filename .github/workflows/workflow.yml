@@ -33,7 +33,7 @@ jobs:
       - name: configure aws credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          role-to-assume: arn:aws:iam::975050823311:role/Github-CodeDeploy-FarmMgmt-Role
+          role-to-assume: arn:aws:iam::975050823311:role/Github-CodeDeploy-AutoFarmConfigurations-Role
           role-session-name: DeployAutoFarmConfigurations
           aws-region: us-east-2
       # Step 2
