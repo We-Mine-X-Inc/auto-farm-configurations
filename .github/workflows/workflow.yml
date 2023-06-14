@@ -1,0 +1,47 @@
+name: Prod CI/CD Pipeline
+on:
+  push:
+    branches: [main]
+permissions:
+  id-token: write # This is required for requesting the JWT
+  contents: read # This is required for actions/checkout
+
+jobs:
+  continuous-integration:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1
+      - name: Use Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      # Step 2
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: ${{ github.sha }}
+      # Step 3
+      # - name: Build Application and Run unit Test
+      #   run: npm install && npm run build:tsc && npm test
+
+  continuous-deployment:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      # Step 1
+      - name: configure aws credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          role-to-assume: arn:aws:iam::975050823311:role/Github-CodeDeploy-FarmMgmt-Role
+          role-session-name: DeployAutoFarmConfigurations
+          aws-region: us-east-2
+      # Step 2
+      - name: Create CodeDeploy Deployment
+        id: deploy
+        run: |
+          aws deploy create-deployment \
+            --application-name AutoFarmConfigurations \
+            --deployment-group-name ${{ secrets.AWS_DEPLOYMENT_GROUP }} \
+            --deployment-config-name CodeDeployDefault.AllAtOnce \
+            --github-location repository=${{ github.repository }},commitId=${{ github.sha }}

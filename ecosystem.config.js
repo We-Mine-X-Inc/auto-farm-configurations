@@ -18,6 +18,10 @@ module.exports = {
       merge_logs: true, // if true, stdout and stderr will be merged and sent to pm2 log
       output: "./logs/pm2/access.log", // pm2 log file
       error: "./logs/pm2/error.log", // pm2 error log file
+      env: {
+        // environment variable that must be loaded before .env.* file ingestion.
+        NODE_ENV: "prod",
+      },
     },
   ],
 };
