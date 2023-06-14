@@ -230,49 +230,6 @@ class PoolSwitchScheduler {
     return Math.min(attemptCount * TEN_MINS_IN_MILLIS, ONE_HOUR_IN_MILLIS);
   }
 
-  /**
-   * Starts managing the pool switching mechanism for each specified contract.
-   * Contracts are specified via their ResourceId.
-   *
-   * @param contractIds
-   */
-  public async startPoolSwitching(
-    infos: {
-      contractId: Types.ObjectId;
-      options: PoolSwitchingOptions;
-    }[]
-  ) {
-    await this.startScheduler();
-
-    infos.forEach(async (info) => {
-      const contract = await this.contractService.findContractById(
-        info.contractId
-      );
-      const hostingContract = contract.hostingContract;
-      if (!hostingContract) {
-        return Promise.reject("Invalid contract ID specified.");
-      }
-      const pool = await this.poolService.findPoolById(
-        hostingContract.poolMiningOptions[info.options.activePoolStateIndex]
-          .pool._id
-      );
-      const miner = await this.minerService.findMinerById(contract.miner._id);
-      const jobData: PoolSwitchJobData = {
-        ...info.options,
-        successfulSwitches: 0,
-        failedSwitches: 0,
-        currentSwitchCount: 1,
-        isContractCompleted: false,
-        contractId: contract._id,
-        minerId: miner._id,
-        isCompanyPool:
-          pool.purpose == PoolPurposeType.MINING_FEE ||
-          pool.purpose == PoolPurposeType.PURE_COMPANY_REVENUE,
-      };
-      await this.scheduler.now(JOB_NAMES.SWITCH_POOL, jobData);
-    });
-  }
-
   public async startScheduler() {
     if (this.isSchedulerStarted) {
       return;

@@ -1,9 +1,15 @@
-import { join } from "path";
 import { logger } from "@logger/logger";
-// import PoolSwitchScheduler from "./scheduler/pool-switch-scheduler";
+import PoolSwitchScheduler from "./scheduler/pool-switch-scheduler";
+import { dbConnection } from "./databases";
 
-logger.log("debug", "Starting Auto Farm Configuration Jobs!!!");
-console.log(__dirname);
-console.log(join(__dirname, "../hello"));
+logger.info("Starting Auto Farm Configuration Jobs!!!");
 
-// PoolSwitchScheduler.get().startScheduler();
+async function executeFarmConfigurations() {
+  logger.info("Connect to Database!!!");
+  await dbConnection.connect();
+
+  logger.info("Start Pool Switch Scheduler!!!");
+  await PoolSwitchScheduler.get().startScheduler();
+}
+
+executeFarmConfigurations();

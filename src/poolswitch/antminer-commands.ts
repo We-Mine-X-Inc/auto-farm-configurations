@@ -1,4 +1,4 @@
-import { logger } from "wemine-common-utils";
+import { logger } from "@logger/logger";
 import AxiosDigestAuth from "@mhoc/axios-digest-auth";
 import { SwitchPoolParams, VerifyOperationsParams } from "./common-types";
 import { format as prettyFormat } from "pretty-format";
