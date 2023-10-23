@@ -14,7 +14,7 @@ SHOULD_START_SERVER=true
 # Path is defined in appspec.yml
 INITIAL_PUSH_LOCATION=/home/$USER/applications/$APP_DIR
 COMPOSITES_DIR=all-composites
-COMPOSITES_ENV_DIR=/home/$USER/applications/$COMPOSITES_DIR/$APP_DIR/$VERSION_SUFFIX
+COMPOSITES_ENV_DIR=/home/$USER/applications/$COMPOSITES_DIR/$LAUNCH_ENV/$APP_DIR/$VERSION_SUFFIX
 CONFIG_LOCATION=/home/$USER/applications/configs/.env.$LAUNCH_ENV.local
 
 # Move initially uploaded content to destination folder.
