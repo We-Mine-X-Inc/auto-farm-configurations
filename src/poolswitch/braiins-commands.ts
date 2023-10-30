@@ -14,6 +14,7 @@ import {
   POOL_VERIFICATION_FAILURE_PREFIX,
 } from "./constants";
 import { format as prettyFormat } from "pretty-format";
+import { constructPoolUser } from "./pool-user";
 const { exec } = require("child_process");
 
 export async function verifyBraiinsHashRate(miner: Miner) {
@@ -165,7 +166,7 @@ async function removePool(params: SwitchPoolParams) {
 async function addPool(params: SwitchPoolParams) {
   const minerIP = params.miner.ipAddress;
   const poolUrl = `${params.pool.protocol}://${params.pool.domain}`;
-  const poolUsr = params.pool.username;
+  const poolUsr = constructPoolUser(params);
   const addPoolCommand = `echo '{"command":"addpool","parameter":"${poolUrl},${poolUsr},"}' | nc ${minerIP} 4028 | jq .`;
 
   exec(addPoolCommand, (error: any, stdout: any, stderr: any) => {

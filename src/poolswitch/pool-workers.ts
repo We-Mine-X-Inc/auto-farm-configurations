@@ -11,8 +11,9 @@ export function getPoolWorker(
   switchPoolInfo: SwitchPoolParams | VerifyOperationsParams
 ) {
   const purpose = switchPoolInfo.pool.purpose;
+  const friendlyPoolId = switchPoolInfo.pool.friendlyPoolId;
   const friendlyMinerId = switchPoolInfo.miner.friendlyMinerId;
-  return `${getPoolWorkerPrefix(purpose)}_${friendlyMinerId}`;
+  return `${getPoolWorkerPrefix(purpose)}_${friendlyPoolId}_${friendlyMinerId}`;
 }
 
 function getPoolWorkerPrefix(purpose: PoolPurposeType) {
